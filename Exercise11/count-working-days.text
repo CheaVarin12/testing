@@ -1,0 +1,37 @@
+function countWorkingDays(year) {
+    const holidays = [
+        new Date(year, 0, 7),  // 7 January
+        new Date(year, 3, 13), // 13 April
+        new Date(year, 3, 14), // 14 April
+        new Date(year, 3, 15), // 15 April
+        new Date(year, 10, 9)  // 9 November
+    ];
+
+    let fullDays = 0;
+    let halfDays = 0;
+    
+    let startDate = new Date(year, 0, 1);
+    let endDate = new Date(year, 11, 31);
+
+    while (startDate <= endDate) {
+        let dayOfWeek = startDate.getDay(); 
+        
+        let isHoliday = holidays.some(holiday =>
+            holiday.getDate() === startDate.getDate() &&
+            holiday.getMonth() === startDate.getMonth()
+        );
+
+        if (!isHoliday) {
+            if (dayOfWeek === 6) { 
+                halfDays += 0.5;
+            } else if (dayOfWeek !== 0) { 
+                fullDays += 1;
+            }
+        }
+
+        startDate.setDate(startDate.getDate() + 1);
+    }
+
+    return Math.floor(fullDays + halfDays); 
+}
+

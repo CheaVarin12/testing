@@ -1,0 +1,3 @@
+What is the primary security risk if user inputs are not sanitized in an SQL query?
+
+b. SQL Injection

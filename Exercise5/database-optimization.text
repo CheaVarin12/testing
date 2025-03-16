@@ -1,0 +1,31 @@
+1.Write an optimized SQL query to find the top 5 customers who spent the most in the last 6 months.
+
+SELECT 
+    c.id AS customer_id,
+    c.name AS customer_name,
+    c.email AS customer_email,
+    SUM(o.total_amount) AS total_spent
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+WHERE o.created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+GROUP BY c.id, c.name, c.email
+ORDER BY total_spent DESC
+LIMIT 5;
+
+
+2.Write an optimized SQL query to fetch orders with their items in a single query (avoiding the N+1 problem).
+
+SELECT 
+    o.id AS order_id,
+    o.customer_id,
+    c.name AS customer_name,
+    o.total_amount,
+    o.created_at,
+    oi.id AS order_item_id,
+    oi.product_id,
+    oi.quantity,
+    oi.price
+FROM orders o
+JOIN order_items oi ON o.id = oi.order_id
+JOIN customers c ON o.customer_id = c.id
+ORDER BY o.id, oi.id;
