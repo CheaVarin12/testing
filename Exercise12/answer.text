@@ -1,0 +1,53 @@
+1. Please set each field's data type and length in all the above tables’ fields.
+
+CREATE TABLE staffs (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    sex ENUM('M', 'F') NOT NULL,
+    date_of_birth DATE NOT NULL,
+    address TEXT NOT NULL,
+    phone VARCHAR(20) NOT NULL UNIQUE
+);
+
+CREATE TABLE positions (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    staff_id BIGINT UNSIGNED NOT NULL,
+    position VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NULL,
+    FOREIGN KEY (staff_id) REFERENCES staffs(id) ON DELETE CASCADE
+);
+
+2. Write a raw query to select data for the following list.
+
+| Staff ID | Name | Sex | Date of Birth | Address | Phone | Current Position |
+
+
+SELECT 
+    s.id AS `Staff ID`,
+    s.name AS `Name`,
+    s.sex AS `Sex`,
+    s.date_of_birth AS `Date of Birth`,
+    s.address AS `Address`,
+    s.phone AS `Phone`,
+    p.position AS `Current Position`
+FROM staffs s
+LEFT JOIN positions p ON s.id = p.staff_id
+WHERE p.end_date IS NULL;
+
+3. Write a raw query to select staff who have worked more than 5 years.
+
+| Staff ID | Name | Sex | Date of Birth | Address | Phone | Current Position |
+
+SELECT 
+    s.id AS `Staff ID`,
+    s.name AS `Name`,
+    s.sex AS `Sex`,
+    s.date_of_birth AS `Date of Birth`,
+    s.address AS `Address`,
+    s.phone AS `Phone`,
+    p.position AS `Current Position`
+FROM staffs s
+JOIN positions p ON s.id = p.staff_id
+WHERE DATEDIFF(CURDATE(), p.start_date) / 365 > 5
+AND p.end_date IS NULL;
